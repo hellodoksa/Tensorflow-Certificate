@@ -62,7 +62,7 @@ Some notes:
 
 I've started the code for you below -- how would you finish it? 
 '''
-def callback () :
+def callback () : ## Exercise
 
     class myCallback(tf.keras.callbacks.Callback):
         def on_epoch_end(self, epoch, logs={}):
