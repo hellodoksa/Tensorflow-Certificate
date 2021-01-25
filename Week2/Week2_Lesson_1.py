@@ -179,7 +179,6 @@ def CatAndDog () :
     plt.title('Training and validation loss')
     plt.show()
 
-def exercise () :
 # Write a python function called split_data which takes
 # a SOURCE directory containing the files
 # a TRAINING directory that a portion of the files will be copied to
@@ -192,17 +191,73 @@ def exercise () :
 # and 10% of the images will be copied to the TESTING dir
 # Also -- All images should be checked, and if they have a zero file length,
 # they will not be copied over
-#
-# os.listdir(DIRECTORY) gives you a listing of the contents of that directory
-# os.path.getsize(PATH) gives you the size of the file
-# copyfile(source, destination) copies a file from source to destination
-# random.sample(list, len(list)) shuffles a list
-    pass
+
+
 # os.listdir(DIRECTORY) gives you a listing of the contents of that directory
 # os.path.getsize(PATH) gives you the size of the file
 # copyfile(source, destination) copies a file from source to destination
 # random.sample(list, len(list)) shuffles a list
 def split_data(SOURCE, TRAINING, TESTING, SPLIT_SIZE):
-    soure_img_list = os.listdir(SOURCE)
+    import random
+    from shutil import copyfile
+    soure_img_list_num  = len(os.listdir(SOURCE))
+    train_num = int(soure_img_list_num * SPLIT_SIZE)
+    test_num  = int(soure_img_list_num * (1 - SPLIT_SIZE)) + 1
+
+    train_random_img_list = random.sample(os.listdir(SOURCE) ,train_num)
+    test_random_img_list  = random.sample(os.listdir(SOURCE) ,test_num )
+    print(len(train_random_img_list))
+    print(len(test_random_img_list))
+
+    for f in train_random_img_list :
+        from_path       = SOURCE   + f
+        copy_train_path = TRAINING +f
+        copyfile(from_path , copy_train_path)
+
+    for ff in test_random_img_list :
+        copy_test_path  = TESTING  + ff
+        copyfile(from_path , copy_test_path)
+
+    '''
+    TRAINING_DIR  = '/tmp/cats-v-dogs/training/'#YOUR CODE HERE
+    train_datagen = ImageDataGenerator(rescale=1/255)#YOUR CODE HERE
+    
+    # NOTE: YOU MUST USE A BATCH SIZE OF 10 (batch_size=10) FOR THE 
+    # TRAIN GENERATOR.
+    train_generator = train_datagen.flow_from_directory(
+        TRAINING_DIR ,
+        batch_size = 10 , 
+        class_mode='binary',
+        target_size=(150, 150)
+    ) #YOUR CODE HERE
+    
+    VALIDATION_DIR = '/tmp/cats-v-dogs/testing/'#YOUR CODE HERE
+    validation_datagen = ImageDataGenerator(rescale=1/255) #YOUR CODE HERE
+    
+    # NOTE: YOU MUST USE A BACTH SIZE OF 10 (batch_size=10) FOR THE 
+    # VALIDATION GENERATOR.
+    validation_generator = validation_datagen.flow_from_directory(
+        VALIDATION_DIR , 
+        batch_size = 10 , 
+        class_mode='binary',
+        target_size=(150, 150)
+    ) #YOUR CODE HERE
+    '''
+
+
 if __name__ == '__main__' :
     CatAndDog()
+
+    test = False
+    if test :
+        CAT_SOURCE_DIR = "/tmp/PetImages/Cat/"
+        TRAINING_CATS_DIR = "/tmp/cats-v-dogs/training/cats/"
+        TESTING_CATS_DIR = "/tmp/cats-v-dogs/testing/cats/"
+
+        DOG_SOURCE_DIR = "/tmp/PetImages/Dog/"
+        TRAINING_DOGS_DIR = "/tmp/cats-v-dogs/training/dogs/"
+        TESTING_DOGS_DIR = "/tmp/cats-v-dogs/testing/dogs/"
+
+        split_size = .9
+        split_data(CAT_SOURCE_DIR, TRAINING_CATS_DIR, TESTING_CATS_DIR, split_size)
+        split_data(DOG_SOURCE_DIR, TRAINING_DOGS_DIR, TESTING_DOGS_DIR, split_size)

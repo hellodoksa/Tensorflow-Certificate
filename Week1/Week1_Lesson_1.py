@@ -256,7 +256,7 @@ def part5() :
         batch_size=128,
         # Since we use binary_crossentropy loss, we need binary labels
         class_mode='binary')
-
+    
     history = model.fit(
         train_generator,
         steps_per_epoch=8,
